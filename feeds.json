@@ -1,0 +1,88 @@
+[
+  {
+    "name": "LBCI latest Arabic",
+    "url": "https://www.lbcgroup.tv/Rss/latest-news/ar",
+    "type": "rss",
+    "limit": 12,
+    "maxAgeHours": 12
+  },
+  {
+    "name": "LBCI News Highlights",
+    "url": "https://www.lbcgroup.tv/Rss/NewsHighlights/ar",
+    "type": "rss",
+    "limit": 8,
+    "maxAgeHours": 24
+  },
+  {
+    "name": "LBCI Lebanon",
+    "url": "https://www.lbcgroup.tv/Rss/News/ar/8/lebanon-news",
+    "type": "rss",
+    "limit": 5,
+    "maxAgeHours": 48
+  },
+  {
+    "name": "LBCI Middle East",
+    "url": "https://www.lbcgroup.tv/Rss/News/ar/126/middle-east-news",
+    "type": "rss",
+    "category": "دولي",
+    "limit": 4,
+    "maxAgeHours": 48
+  },
+  {
+    "name": "LBCI World",
+    "url": "https://www.lbcgroup.tv/Rss/News/ar/125/world-news",
+    "type": "rss",
+    "category": "دولي",
+    "limit": 4,
+    "maxAgeHours": 48
+  },
+  {
+    "name": "aljadeed",
+    "url": "https://www.aljadeed.tv/Rss/latest-news",
+    "type": "rss"
+  },
+  {
+    "name": "Al Jadeed Arab and International",
+    "url": "https://www.aljadeed.tv/news/category/57/%D8%B9%D8%B1%D8%A8%D9%8A-%D9%88-%D8%AF%D9%88%D9%84%D9%8A",
+    "type": "web",
+    "category": "دولي",
+    "limit": 8,
+    "maxAgeHours": 24
+  },
+  {
+    "name": "bintjbeil.org",
+    "url": "https://rss.app/feeds/PNxJywo7NqTzbIh4.xml",
+    "type": "rss"
+  },
+  {
+    "name": "almanar",
+    "url": "https://rss.app/feeds/pVWhy0PRJb8qEExV.xml",
+    "type": "rss"
+  },
+  {
+    "name": "reuters",
+    "url": "https://www.reuters.com/ar/",
+    "type": "web",
+    "category": "دولي"
+  },
+  {
+    "name": "Lebanon 24 RSS",
+    "url": "https://www.lebanon24.com/Rss/News/1/%D9%84%D8%A8%D9%86%D8%A7%D9%86",
+    "type": "rss"
+  },
+  {
+    "name": "al jazeera arabic",
+    "url": "https://www.aljazeera.net/where/mideast/arab/lebanon/",
+    "type": "web"
+  },
+  {
+    "name": "Lebanon debate",
+    "url": "https://www.lebanondebate.com/category/223-%D8%B9%D9%84%D9%89-%D9%85%D8%AF%D8%A7%D8%B1-%D8%A7%D9%84%D8%B3%D8%A7%D8%B9%D8%A9",
+    "type": "web"
+  },
+  {
+    "name": "Telegram mmirleb",
+    "url": "https://t.me/s/mmirleb",
+    "type": "telegram"
+  }
+]

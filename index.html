@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>أبعاد المشهد - أخبار لبنان الآن</title>
+    <meta name="description" content="منصة إخبارية لبنانية ذكية تعمل على مدار الساعة" />
+    <meta property="og:title" content="أبعاد المشهد - أخبار لبنان الآن" />
+    <meta property="og:description" content="منصة إخبارية لبنانية ذكية تعمل على مدار الساعة" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#06284b" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260630-alert-hero-white1" />
+  </head>
+  <body>
+    <div class="ticker-bar">
+      <div class="ticker-label">الأسعار المباشرة</div>
+      <div class="ticker-scroll">
+        <div class="ticker-track" id="tickerTrack"></div>
+      </div>
+    </div>
+
+    <div class="breaking-banner" id="breakingBanner" aria-live="polite" hidden></div>
+
+    <header class="header">
+      <a class="login-link" href="./admin.html">Login</a>
+      <div class="header-actions" id="headerActions">
+        <button class="site-menu-button" id="headerMenuButton" type="button" aria-controls="headerMenu" aria-expanded="false">خدمات</button>
+        <a class="about-link" href="./about.html">من نحن؟</a>
+      </div>
+      <h1>أبعاد المشهد</h1>
+      <p>حيث يبدأ الخبر</p>
+      <div class="header-menu" id="headerMenu">
+        <button class="field-toggle" id="fieldToggle" type="button">من الميدان</button>
+        <button class="live-tv-link" id="liveTvButton" type="button">شاشة لبنان</button>
+        <button class="what-if-link" id="whatIfButton" type="button">ماذا لو؟</button>
+        <a class="about-link" href="./about.html">من نحن؟</a>
+        <a class="about-link" href="./privacy.html">سياسة الخصوصية</a>
+        <a class="about-link" href="./terms.html">شروط الاستخدام</a>
+        <a class="about-link" href="./contact.html">اتصل بنا</a>
+      </div>
+    </header>
+
+    <nav class="cat-tabs" id="catTabs" aria-label="تصنيفات الأخبار"></nav>
+
+    <div class="main-layout">
+      <main id="feed">
+        <div class="loading">
+          <div class="spinner"></div>
+          <div>جاري تحميل الأخبار...</div>
+        </div>
+      </main>
+
+      <aside class="left-rail" aria-label="الطقس والأكثر قراءة">
+        <section class="weather-card">
+          <div class="weather-icon">☼</div>
+          <div>
+            <strong>بيروت 19°C</strong>
+            <span>مشمس لغائم</span>
+          </div>
+        </section>
+
+        <section class="most-read">
+          <h2>الأكثر قراءة</h2>
+          <ol id="mostReadList"></ol>
+        </section>
+      </aside>
+    </div>
+
+    <section class="article-view" id="articleView" aria-hidden="true">
+      <div class="av-header">
+        <button class="av-back" id="backButton" type="button">→ العودة للرئيسية</button>
+        <span>أبعاد المشهد</span>
+      </div>
+      <div class="av-content" id="avContent"></div>
+    </section>
+
+    <aside class="field-live" id="fieldLivePanel" aria-label="من الميدان" aria-hidden="true">
+      <div class="field-live-head">
+        <button class="field-close" id="fieldClose" type="button">إغلاق</button>
+        <div>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+          <h2>من الميدان</h2>
+        </div>
+      </div>
+      <div class="field-feed" id="fieldFeed"></div>
+    </aside>
+
+    <div class="field-backdrop" id="fieldBackdrop" aria-hidden="true"></div>
+
+    <section class="live-tv-view" id="liveTvView" aria-hidden="true">
+      <div class="live-tv-shell">
+        <div class="live-tv-head">
+          <button class="live-tv-close" id="liveTvClose" type="button">إغلاق</button>
+          <div>
+            <span>Live TV</span>
+            <h2>شاشة القنوات اللبنانية</h2>
+          </div>
+        </div>
+        <div class="live-tv-body">
+          <div class="tv-player">
+            <div class="tv-placeholder" id="tvPlaceholder">
+              <strong>اختر قناة</strong>
+              <span>اختر قناة لمعرفة طريقة المشاهدة المتاحة.</span>
+            </div>
+          </div>
+          <div class="tv-side">
+            <div class="tv-now">
+              <span>يعرض الآن</span>
+              <strong id="liveTvTitle">لم يتم اختيار قناة</strong>
+              <em id="liveTvStatus">داخل أبعاد المشهد فقط</em>
+            </div>
+            <div class="tv-channel-grid" id="liveTvChannels"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scenario-view" id="scenarioView" aria-hidden="true">
+      <div class="scenario-shell">
+        <div class="scenario-head">
+          <button class="scenario-close" id="scenarioClose" type="button" aria-label="إغلاق">×</button>
+          <div>
+            <span><i></i> AI LIVE SIMULATOR</span>
+            <h2>محاكي الأزمات التفاعلي: ماذا لو؟</h2>
+            <p>اختبر سيناريو سياسي أو أمني أو اقتصادي وشاهد قراءة فورية لتداعياته المحتملة.</p>
+          </div>
+        </div>
+
+        <form class="scenario-controls" id="scenarioForm">
+          <label>
+            <span>إذا حدث:</span>
+            <select id="scenarioSelect">
+              <option value="تصعيد عسكري واسع في جنوب لبنان">تصعيد عسكري واسع في جنوب لبنان</option>
+              <option value="تعثر مفاوضات وقف إطلاق النار">تعثر مفاوضات وقف إطلاق النار</option>
+              <option value="ارتفاع مفاجئ في سعر صرف الدولار">ارتفاع مفاجئ في سعر صرف الدولار</option>
+              <option value="إقفال طريق أو مرفق حيوي">إقفال طريق أو مرفق حيوي</option>
+              <option value="انفراج دبلوماسي وتهدئة أمنية">انفراج دبلوماسي وتهدئة أمنية</option>
+            </select>
+          </label>
+          <label>
+            <span>لِمدة:</span>
+            <select id="scenarioDuration">
+              <option value="24 ساعة">24 ساعة</option>
+              <option value="72 ساعة">72 ساعة</option>
+              <option value="أسبوع">أسبوع</option>
+              <option value="شهر">شهر</option>
+            </select>
+          </label>
+          <button type="submit">⚡ حاكِ الآن</button>
+        </form>
+
+        <div class="scenario-loading" id="scenarioLoading" hidden>
+          <div class="data-stream" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <strong id="scenarioLoadingText">جاري استدعاء البيانات الجيوسياسية...</strong>
+        </div>
+
+        <div class="scenario-results" id="scenarioResults">
+          <div class="scenario-empty">
+            <strong>اختر سيناريو واضغط “حاكِ الآن”.</strong>
+            <span>سيظهر هنا تقرير بصري سريع مع مؤشرات الدولار، التموين، التوتر، واحتمالات المشهد.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ask-widget" id="askWidget" aria-hidden="true">
+      <button class="ask-toggle" id="askToggle" type="button" aria-controls="askPanel" aria-expanded="false">
+        اسأل المشهد
+      </button>
+      <div class="ask-panel" id="askPanel">
+        <div class="ask-head">
+          <button class="ask-close" id="askClose" type="button" aria-label="إغلاق">×</button>
+          <div>
+            <span>AI News Chat</span>
+            <h2>اسأل المشهد</h2>
+          </div>
+        </div>
+        <div class="ask-intro">
+          اسأل عن آخر الأخبار المنشورة على أبعاد المشهد، والجواب يبنى فقط على قاعدة أخبار الموقع.
+        </div>
+        <div class="ask-messages" id="askMessages" aria-live="polite"></div>
+        <form class="ask-form" id="askForm">
+          <input id="askInput" type="text" autocomplete="off" maxlength="320" placeholder="مثلاً: شو ملخص الوضع الأمني بالجنوب؟" />
+          <button type="submit">إرسال</button>
+        </form>
+        <div class="ask-counter" id="askCounter"></div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div>
+        <strong>أبعاد المشهد</strong>
+        <span>منصة إخبارية لبنانية ذكية، حيث يبدأ الخبر.</span>
+      </div>
+      <nav aria-label="روابط قانونية">
+        <a href="./about.html">من نحن؟</a>
+        <a href="./privacy.html">سياسة الخصوصية</a>
+        <a href="./terms.html">شروط الاستخدام</a>
+        <a href="./contact.html">اتصل بنا</a>
+      </nav>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./app.js?v=20260621-avichay-media1"></script>
+  </body>
+</html>

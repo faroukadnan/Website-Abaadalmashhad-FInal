@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+*.log
+data/articles.json
+data/site-state.json
+data/development-ideas.json
+tmp-cookie.txt

@@ -1,0 +1,24 @@
+[
+  {
+    "handle": "@alirabah_11",
+    "url": "https://x.com/alirabah_11",
+    "name": "Ali Rabah",
+    "rssUrl": "https://fxtwitter.com/alirabah_11/feed.xml",
+    "rssUrls": [
+      "https://fxtwitter.com/alirabah_11/feed.xml",
+      "https://fxtwitter.com/alirabah_11/feed.atom.xml",
+      "https://fxtwitter.com/alirabah_11/feed.xml?with_replies=1"
+    ]
+  },
+  {
+    "handle": "@mchebaro",
+    "url": "https://x.com/mchebaro",
+    "name": "Mouhammad Chebaro",
+    "rssUrl": "https://fxtwitter.com/mchebaro/feed.xml",
+    "rssUrls": [
+      "https://fxtwitter.com/mchebaro/feed.xml",
+      "https://fxtwitter.com/mchebaro/feed.atom.xml",
+      "https://fxtwitter.com/mchebaro/feed.xml?with_replies=1"
+    ]
+  }
+]

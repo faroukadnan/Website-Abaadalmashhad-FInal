@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dashboard | أبعاد المشهد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./admin.css?v=20260601-ideas1" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <section class="login-panel" id="loginPanel">
+        <div class="login-card">
+          <div class="brand-badge">أ</div>
+          <h1>تسجيل الدخول</h1>
+          <p>لوحة إدارة أخبار أبعاد المشهد</p>
+          <form id="loginForm">
+            <label>
+              <span>اسم المستخدم</span>
+              <input name="username" type="text" autocomplete="username" required />
+            </label>
+            <label>
+              <span>كلمة المرور</span>
+              <input name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <button type="submit">دخول</button>
+            <div class="form-error" id="loginError"></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="dashboard hidden" id="dashboard">
+        <header class="dash-header">
+          <div>
+            <h1>إدارة الأخبار</h1>
+            <p>عرض، تعديل، حذف، ومتابعة زيارات كل خبر</p>
+          </div>
+          <div class="header-actions">
+            <a href="./index.html">الموقع</a>
+            <button id="warRoomButton" type="button">War Room</button>
+            <button id="ideasButton" type="button">أفكار قيد التطوير</button>
+            <button id="flowMapButton" type="button">خريطة التشغيل</button>
+            <button id="apiUsageButton" type="button">حالة الـ APIs</button>
+            <button id="addButton" type="button">إضافة خبر</button>
+            <button id="refreshButton" type="button">تحديث</button>
+            <button id="refreshAlertsButton" class="alert-refresh-button" type="button">تحديث الإنذارات</button>
+            <button id="logoutButton" type="button">خروج</button>
+          </div>
+        </header>
+
+        <section class="gemini-countdown ready" id="geminiCountdown">
+          <div>
+            <span class="gemini-kicker">ON AIR COUNTDOWN</span>
+            <strong id="geminiCountdownTitle">Gemini Ready</strong>
+            <small id="geminiCountdownNote">AI editorial agent is ready to process news.</small>
+          </div>
+          <div class="gemini-clock" id="geminiCountdownClock">00:00</div>
+        </section>
+
+        <section class="stats-grid">
+          <div class="stat-card">
+            <span>عدد الأخبار</span>
+            <strong id="totalArticles">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Total Visits</span>
+            <strong id="totalViews">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Last Update</span>
+            <strong id="lastUpdated">--</strong>
+          </div>
+          <div class="stat-card status-card online" id="siteStatusCard">
+            <span>Website Status</span>
+            <div class="status-row">
+              <strong id="siteStatusText">Checking...</strong>
+              <button id="siteStatusToggle" type="button">...</button>
+            </div>
+            <small id="siteStatusNote">Dashboard is active</small>
+          </div>
+        </section>
+
+        <section class="toolbar">
+          <input id="searchInput" type="search" placeholder="بحث عن خبر..." />
+          <select id="categoryFilter">
+            <option value="all">كل التصنيفات</option>
+            <option value="سياسة">سياسة</option>
+            <option value="أمن">أمن</option>
+            <option value="اقتصاد">اقتصاد</option>
+            <option value="فن">فن</option>
+            <option value="رياضة">رياضة</option>
+            <option value="دولي">دولي</option>
+            <option value="النافذة العبرية">النافذة العبرية</option>
+          </select>
+        </section>
+
+        <section class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>العنوان</th>
+                <th>التصنيف</th>
+                <th>المصدر</th>
+                <th>Fact Check</th>
+                <th>الزيارات</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="articlesTable"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState">لا توجد أخبار مطابقة</div>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="modal" id="articleModal">
+      <form method="dialog" class="modal-card">
+        <div class="modal-head">
+          <h2 id="modalTitle">الخبر</h2>
+          <button value="close" type="submit" formnovalidate>×</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="editModal">
+      <form class="modal-card edit-form" id="editForm">
+        <div class="modal-head">
+          <h2 id="editModalTitle">تعديل الخبر</h2>
+          <button value="close" type="button" id="closeEditButton">×</button>
+        </div>
+        <input type="hidden" name="id" />
+        <label>
+          <span>العنوان</span>
+          <input name="title" required />
+        </label>
+        <label>
+          <span>التصنيف</span>
+          <select name="category">
+            <option>سياسة</option>
+            <option>أمن</option>
+            <option>اقتصاد</option>
+            <option>فن</option>
+            <option>رياضة</option>
+            <option>دولي</option>
+            <option>النافذة العبرية</option>
+          </select>
+        </label>
+        <label>
+          <span>رابط الصورة</span>
+          <input name="imageUrl" type="text" placeholder="https://... أو /api/symbolic-image/..." />
+        </label>
+        <label>
+          <span>متن الخبر</span>
+          <textarea name="body" rows="8" required></textarea>
+        </label>
+        <label>
+          <span>أبعاد المشهد</span>
+          <textarea name="dimensions" rows="5"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="ghost" id="cancelEditButton">إلغاء</button>
+          <button type="submit">حفظ التعديل</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="apiUsageModal">
+      <form method="dialog" class="modal-card api-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>حالة الـ APIs</h2>
+            <p>متابعة محلية للاستخدام، الأعطال، وحالة كل مفتاح.</p>
+          </div>
+          <button value="close" type="submit">×</button>
+        </div>
+        <div class="api-modal-meta">
+          <span>Last Update</span>
+          <strong id="apiUsageUpdated">--</strong>
+        </div>
+        <div class="api-grid" id="apiUsageGrid"></div>
+        <div class="api-note" id="apiUsageNote"></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal flow-modal" id="flowMapModal">
+      <form method="dialog" class="modal-card flow-modal-card">
+        <div class="modal-head">
+          <div>
+            <h2>خريطة تشغيل الموقع</h2>
+            <p>متابعة حيّة لمسار الأخبار من المصدر حتى الظهور على الموقع.</p>
+          </div>
+          <button value="close" type="submit">×</button>
+        </div>
+        <div class="flow-meta">
+          <span>Live Monitor</span>
+          <strong id="flowMapUpdated">--</strong>
+        </div>
+        <div class="flow-layout">
+          <section class="flow-canvas" id="flowCanvas"></section>
+          <aside class="flow-details" id="flowDetails"></aside>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="modal war-room-modal" id="warRoomModal">
+      <form method="dialog" class="modal-card war-room-card">
+        <div class="modal-head war-room-head">
+          <div>
+            <span>Live Operations</span>
+            <h2>Live War Room Dashboard</h2>
+            <p>غرفة متابعة فورية للعاجل، الذكاء الاصطناعي، المصادر، والقرارات التحريرية.</p>
+          </div>
+          <button value="close" type="submit">×</button>
+        </div>
+        <div class="war-room-meta">
+          <span>ON AIR</span>
+          <strong id="warRoomUpdated">--</strong>
+        </div>
+        <div class="war-room-content" id="warRoomContent"></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal image-desk-modal" id="imageDeskModal">
+      <form method="dialog" class="modal-card image-desk-card">
+        <div class="modal-head">
+          <div>
+            <h2>Smart Image Desk</h2>
+            <p>اقتراح 3 صور للخبر: من المصدر، من Google، أو صورة رمزية حسب الموضوع.</p>
+          </div>
+          <button value="close" type="submit">×</button>
+        </div>
+        <div class="image-desk-body" id="imageDeskBody"></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal ideas-modal" id="ideasModal">
+      <form method="dialog" class="modal-card ideas-card">
+        <div class="modal-head">
+          <div>
+            <h2>أفكار قيد التطوير</h2>
+            <p>مساحة داخلية لحفظ الأفكار التي نناقشها قبل تنفيذها على الموقع.</p>
+          </div>
+          <button value="close" type="submit" formnovalidate>×</button>
+        </div>
+        <div class="ideas-layout">
+          <section class="idea-editor">
+            <div id="ideaForm">
+              <input type="hidden" name="id" />
+              <label>
+                <span>عنوان الفكرة</span>
+                <input name="title" required placeholder="مثلاً: Social media publisher" />
+              </label>
+              <label>
+                <span>الحالة</span>
+                <select name="status">
+                  <option>قيد التطوير</option>
+                  <option>جاهزة للتنفيذ</option>
+                  <option>مؤجلة</option>
+                  <option>منفذة</option>
+                </select>
+              </label>
+              <label>
+                <span>تفاصيل الفكرة</span>
+                <textarea name="body" rows="14" required placeholder="اكتب الفكرة، الشروط، الخطوات، أو الملاحظات..."></textarea>
+              </label>
+              <div class="modal-actions">
+                <button type="button" class="ghost" id="cancelIdeaButton">تفريغ</button>
+                <button type="button" id="saveIdeaButton">حفظ الفكرة</button>
+              </div>
+            </div>
+          </section>
+          <section class="ideas-list" id="ideasList"></section>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="./admin.js?v=20260602-timer1"></script>
+  </body>
+</html>
